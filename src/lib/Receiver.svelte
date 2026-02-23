@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+  import { onMount } from "svelte";
 
     let socket:WebSocket
     let messages:Array<string> = $state([])
 
-    onMount(()=>{
+    let socketFuncs = () => {
         socket = new WebSocket('ws://localhost:8250/wss')
         socket.onopen = () => {
             console.log("WS connection established") // look what a cool word I have learned
@@ -26,9 +26,14 @@
         return () => {
             socket.close()
         }
-    })
+    }
+
+    onMount(socketFuncs)
 </script>
 
+<button type="button" onclick={socketFuncs}>
+    Update connection to WebSocket
+</button>
 <p>messages:</p>
 {#each messages as message }
     <p>{message}</p>
